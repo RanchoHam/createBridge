@@ -17,63 +17,78 @@ echo "must be run as root (sudo OK)"
 exit 1
 fi
 
-# Edit these addresses to match your network and host
+# These are example addresses as used by Shepless in his original reply to my request for help
+# Input the corresponding arguments to match your host and network 
 
-#export HOST_ADDR=192.168.100.66/24
-#export GATEWAY=192.168.100.1
-#export DNS_LOCAL=192.168.100.3
-#export DNS_SEARCH_DOMAINS=example.com
-
-export HOST_ADDR=192.168.101.19/24
-export GATEWAY=192.168.101.1
-export DNS_LOCAL=192.168.10.100
-export DNS_SEARCH_DOMAINS=orion.wb0nre.org,vega.orion.org
+export HOST_ADDR=192.168.100.66/24
+export GATEWAY=192.168.100.1
+export DNS_LOCAL=192.168.100.3
+export DNS_SEARCH_DOMAINS=example.com
 
 # If you use IPV6, set IPV4_ONLY to "NO" and define the correct HOST_IPV6_ADDR and GATEWAY_IPV6 variables
 export IPV4_ONLY="YES"
 export HOST_IPV6_ADDR=2001:db8:25:2::42/64
 export GATEWAY_IPV6=2001:db8:25:2::2
 
-while getopts ':H:G:D:S:h' opt; do
+DRY_RUN=False
+
+while getopts ':H:G:D:S:hd' opt; do
   case "$opt" in
     H)
       arg="$OPTARG"
-      echo "Processing option 'H'"
+      echo "Processing option 'H' with '${OPTARG}' argument"
+      export HOST_ADDR="$OPTARG"
       ;;
 
     G)
       arg="$OPTARG"
-      echo "Processing option 'G'"
+      echo "Processing option 'G' with '${OPTARG}' argument"
+      export GATEWAY="$OPTARG"
       ;;
 
     D)
       arg="$OPTARG"
       echo "Processing option 'D' with '${OPTARG}' argument"
+      export DNS_LOCAL="$OPTARG"
       ;;
 
     S)
       arg="$OPTARG"
       echo "Processing option 'S' with '${OPTARG}' argument"
+      export DNS_SEARCH_DOMAINS="$OPTARG"
+      ;;
+
+    d)
+      echo "dry run"
+      DRY_RUN=True
       ;;
 
     h)
-      echo "Usage: $(basename $0) [-a] [-b] [-c arg]"
+      echo "Usage: $(basename $0) [-h] [-d] -H <host IPV4 w/subnet prefix> -G <gateway IPV4> -D <DNS IPV4> -S <DNS Search Domain(s)>"
       exit 0
       ;;
 
     :)
-      echo -e "option requires an argument.\nUsage: $(basename $0) [-a] [-b] [-c arg]"
+      echo -e "option requires an argument.\nUsage: $(basename $0) [-h] [-d] -H <host IPV4 w/subnet prefix> -G <gateway IPV4> -D <DNS IPV4> -S <DNS Search Domain(s)>"
       exit 1
       ;;
 
     ?)
-      echo -e "Invalid command option.\nUsage: $(basename $0) [-a] [-b] [-c arg]"
+      echo -e "Invalid command option.\nUsage: $(basename $0) [-h] [-d] -H <host IPV4> -G <gateway IPV4 w/subnet prefix> -D <DNS IPV4> -S <DNS Search Domain(s)>"
       exit 1
       ;;
   esac
 done
 shift "$(($OPTIND -1))"
-exit
+echo "HOST_ADDR=$HOST_ADDR"
+echo "GATEWAY=$GATEWAY"
+echo "DNS_LOCAL=$DNS_LOCAL"
+echo "DNS_SEARCH_DOMAINS=$DNS_SEARCH_DOMAINS"
+
+if [ "$DRY_RUN" = "True" ]; then
+  echo "Dry-run: stopping"
+  exit
+fi
 
 # Don't modify after this line
 # First apply the patch to change nat to tap & silently ignore if it has already been applied
