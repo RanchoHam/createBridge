@@ -27,7 +27,7 @@ Finally it will use the Network Manager's CLI to create (or modify) a bridge dev
 ### Installing
 
 * How/where to download this shell script
-* If necessary, clone the pidp11 repository andZZ run the install script to download 211bsd+  
+* If necessary, clone the pidp11 repository and run the install script to download 211bsd+  
 ```
 cd /opt
 sudo git clone https://github.com/obsolescence/pidp11.git
@@ -39,7 +39,7 @@ git clone https://github.com/RanchoHam/createBridge.git
 ```
 * Any modifications needed to be made to files/folders  
 ```
-cd createBidge
+cd createBridge
 ln -f -s `pwd`/createBridge.sh /opt/pidp11/systems/211bsd+/createBridge.sh  
 ```
 
