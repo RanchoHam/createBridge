@@ -49,9 +49,9 @@ ln -f -s `pwd`/createBridge.sh /opt/pidp11/systems/211bsd+/createBridge.sh
 * Step-by-step bullets
 ```
 cd /opt/pidp11/systems/211bsd+
-sudo ./createBridge -h
+sudo ./createBridge.sh -h
 # re-run the script without the -h parameter but with the required options and parameters as indicated by the Usage: prompt
-sudo ./createBridge -H ...
+sudo ./createBridge.sh -H ...
 ```
 
 ## Help
